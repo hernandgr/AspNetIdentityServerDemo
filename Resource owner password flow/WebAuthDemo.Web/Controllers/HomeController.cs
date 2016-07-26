@@ -18,11 +18,36 @@ namespace WebAuthDemo.Web.Controllers
             return View();
         }
 
+        public ActionResult Login()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Login(string username, string password)
+        {
+            var client = new OAuth2Client(new Uri("http://localhost:39606/connect/token"), "webapp", "secret");
+            var requestResponse = client.RequestAccessTokenUserName(username, password,
+                "openid profile offline_access");
+
+            var claims = new[]
+            {
+                new Claim("access_token", requestResponse.AccessToken),
+                new Claim("refresh_token", requestResponse.RefreshToken),
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, DefaultAuthenticationTypes.ApplicationCookie);
+
+            HttpContext.GetOwinContext().Authentication.SignIn(claimsIdentity);
+
+            return RedirectToAction("Private");
+        }
+
         public ActionResult RefreshAccessToken()
         {
             var claimsPrincipal = User as ClaimsPrincipal;
 
-            var client = new OAuth2Client(new Uri("http://localhost:39606/connect/token"), "webapp_code", "secret");
+            var client = new OAuth2Client(new Uri("http://localhost:39606/connect/token"), "webapp", "secret");
             var requestResponse = client.RequestAccessTokenRefreshToken(claimsPrincipal.FindFirst("refresh_token").Value);
 
             var refreshedIdentity = new ClaimsIdentity(User.Identity);
