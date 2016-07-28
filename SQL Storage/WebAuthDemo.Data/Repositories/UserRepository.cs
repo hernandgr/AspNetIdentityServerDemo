@@ -7,12 +7,12 @@ namespace WebAuthDemo.Data.Repositories
 {
     public class UserRepository
     {
-        public async Task<User> GetAsync(string username, string password)
+        public User Get(string username, string password)
         {
             return GetUsers().SingleOrDefault(x => x.Username == username && x.Password == password);
         }
 
-        public async Task<User> GetAsync(string username)
+        public User Get(string username)
         {
             return GetUsers().SingleOrDefault(x => x.Username == username);
         }

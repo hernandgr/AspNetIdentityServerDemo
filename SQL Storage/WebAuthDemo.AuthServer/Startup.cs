@@ -11,6 +11,8 @@ using IdentityServer3.EntityFramework;
 using Microsoft.Owin;
 using Owin;
 using WebAuthDemo.AuthServer.Managers;
+using WebAuthDemo.AuthServer.Services;
+using WebAuthDemo.Data.Repositories;
 
 [assembly: OwinStartup(typeof(WebAuthDemo.AuthServer.Startup))]
 
@@ -32,7 +34,10 @@ namespace WebAuthDemo.AuthServer
             var factory = new IdentityServerServiceFactory();
             factory.RegisterConfigurationServices(efOptions);
             factory.RegisterOperationalServices(efOptions);
-            factory.UserService = new Registration<IUserService>();
+
+            factory.UserService = new Registration<IUserService>(typeof(DemoUserService));
+
+            new TokenCleanup(efOptions).Start();
 
             var certificate = Convert.FromBase64String(ConfigurationManager.AppSettings["SigningCertificate"]);
             var certificatePassword = ConfigurationManager.AppSettings["SigningCertificatePassword"];

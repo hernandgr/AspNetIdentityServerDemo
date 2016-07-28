@@ -119,6 +119,12 @@
     <Compile Include="Services\DemoUserService.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WebAuthDemo.Data\WebAuthDemo.Data.csproj">
+      <Project>{640b82a8-79ab-4e23-8524-cf244d4c55f3}</Project>
+      <Name>WebAuthDemo.Data</Name>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
